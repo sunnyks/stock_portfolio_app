@@ -1,0 +1,13 @@
+user has many portfolios
+
+portfolio has many transactions
+
+user has many transactions through portfolios
+
+to do
+-get authentication setup
+ implement and validate on user#create
+ JWT
+
+-redux implementation
+ make reducers pass dispact connect w. redux

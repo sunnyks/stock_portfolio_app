@@ -1,0 +1,5 @@
+rails g resource User username:string password_digest:string
+
+rails g resource Portfolio user:references name:string
+
+rails g resource Transaction portfolio:references user:references symbol:string type:string date:datetime quantity:int price:decimal

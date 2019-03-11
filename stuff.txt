@@ -1,0 +1,64 @@
+-figure out how to evaluate models
+-figure out how to persist models
+
+-will need to store the most recent day trained on to know which days to train on when fetching new data
+-automatically update everything everytime the project is run and every day its online
+-FIGURE OUT METRICS/HOW TO EVALUATE MODELS
+-cross validation/ splitting training & test data
+
+
+-----------------------------------------------------------------------
+hold off on the ML for now
+
+-User
+has many stockmodels through stocks
+has many stocks
+(have many stockmodels)
+has many predictions through stockmodels
+
+Users
+username/email:string password_digest:string
+*figure out oath2 to sign in with google
+
+
+-Stockmodel
+belongs to user
+belongs to stock
+has many nodes
+has many predictions
+
+Stockmodels
+user:references last_updated:date (save parameters of model to sort by later?)
+
+
+-Node/w.e
+belongs to stockmodel
+
+Nodes
+stockmodel:references layer:integer node/row:integer weight:floating point whatever othervalues:numbers
+FIGURE THIS OUT need to be able to take apart models to save them, then put them back together to update them/display them
+
+figure out storing different sklearn models :o pog!!!  🤯 
+
+
+-Prediction
+ belongs to stockmodel
+
+ date_predicted:date
+
+figure out when to make these
+
+-Stocks
+
+-StockTransactions
+belongs to user
+
+------------------------------------------------------------------------
+
+https://www.practicalai.io/using-scikit-learn-machine-learning-library-in-ruby-using-pycall/
+
+-credit iex
+  Data provided for free by IEX. View IEX’s Terms of Use.
+  https://iextrading.com/api-exhibit-a/
+-url encoding
+-refactor price to be int instead of decimal
