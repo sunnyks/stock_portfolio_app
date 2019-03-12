@@ -1,13 +1,16 @@
 import { createStore } from 'redux';
 
 const initialState = {
-
+  stocks: [],
+  user: null
 }
+
+//show: "market" | "detail" | "profile" | "portfolio" | "transactions"
 
 const rootReducer = (oldState = initialState, action) => {
   switch (action.type) {
-    case '331': {
-      return true
+    case 'fillStocks': {
+      return {...oldState, stocks: action.stocks}
     }
     default: {
       return oldState

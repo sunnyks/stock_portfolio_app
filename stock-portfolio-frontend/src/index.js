@@ -6,11 +6,15 @@ import * as serviceWorker from './serviceWorker';
 import { createStore } from 'redux';
 import { Provider } from 'react-redux';
 import Store from './store.js'; //make this
+import { BrowserRouter as Router } from 'react-router-dom';
 
 
-ReactDOM.render(<Provider store={Store}>
-    <App />
-    </Provider>,
+ReactDOM.render(
+    <Router>
+      <Provider store={Store}>
+        <App />
+      </Provider>
+    </Router>,
     document.getElementById('root'));
 
 // If you want your app to work offline and load faster, you can change
