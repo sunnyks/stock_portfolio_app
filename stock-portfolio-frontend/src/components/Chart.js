@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux'
+import Chart from 'chart.js'
 
-class Chart extends React.Component {
+class StockChart extends React.Component {
 
 }

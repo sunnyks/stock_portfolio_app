@@ -1,33 +1,26 @@
 import React from 'react';
 import { connect } from 'react-redux'
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
-import Ticker from './Ticker'
+import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom';
 import Profile from './Profile'
 import Detail from './Detail'
 import Market from './Market'
-import Navbar from './Navbar'
 import Store from '../store'
+import Header from './Header'
 
 class StockPortfolioApp extends React.Component {
 
   constructor(props) {
     super(props)
-    //this.stocks = null
-    //probably will just put it in store i guess
   }
 
   render() {
     return(
       <div>
-      {/* use header component that holds navbar, ticker, and searchbar*/}
-      <Navbar />
-      <Ticker/>
-      <div>top level container</div>
-      {this.props.stocks /* lol */}
+      <Header/>
       <Switch>
-        <Route path="/profile" component={Profile} />
-        <Route path="/stock/:symbol" component={Detail} />
-        <Route path="/" component={Market} />
+        <Route path="/profile" component={withRouter(Profile)} />
+        <Route path="/stock/:symbol" component={withRouter(Detail)} />
+        <Route exact path="/" component={withRouter(Market)} />
       </Switch>
       </div>
     )
@@ -35,12 +28,12 @@ class StockPortfolioApp extends React.Component {
 
   componentDidMount() {
     fetch("https://api.iextrading.com/1.0/ref-data/symbols").then(res => res.json()).then(data => {
-      // this.props.dispatch
       let stocks = data.map((stock) => {
         return stock.symbol + ' - ' + stock.name
       }) //get list of stock symbols and names
       Store.dispatch({ type: 'fillStocks',
-                       stocks: stocks })
+                       stockNames: stocks ,
+                       stockObjs: data })
     })
   }
 
@@ -48,8 +41,8 @@ class StockPortfolioApp extends React.Component {
 
 
 const mapStateToProps = state => {
-  return { stocks: state.stocks }
-        // ??
+  return { stocks: state.stocks,
+            API: state.API }
 }
 
 
@@ -57,4 +50,4 @@ const mapDispatchToProps = dispatch => {
   return
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(StockPortfolioApp) // pass in dispatch stuff? here or elsewhere IDK
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(StockPortfolioApp)) // pass in dispatch stuff? here or elsewhere IDK

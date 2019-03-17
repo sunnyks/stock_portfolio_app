@@ -1,12 +1,17 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux'
 
 class Navbar extends React.Component {
 
 
   render() {
-    return('navbar')
+    return(
+      <div>
+        <div>'navbar with login/logout profile and searchbar(add searchbar component)'</div>
+        <div><Link to={'/'} className={'lol'}>Market</Link> <Link to={'/profile'}> Profile </Link></div>
+      </div>
+    )
   }
 }
 
@@ -21,4 +26,4 @@ const mapDispatchToProps = dispatch => {
 }
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Navbar)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Navbar))

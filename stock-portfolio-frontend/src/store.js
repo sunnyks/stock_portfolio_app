@@ -1,16 +1,26 @@
 import { createStore } from 'redux';
 
 const initialState = {
-  stocks: [],
-  user: null
+  stockNames: [],
+  stockObjs: [],
+  user: null,
+  API: 'https://api.iextrading.com/1.0',
+  market: {mostactive: null,
+           gainers: null,
+           losers: null},
+  detail: null
 }
-
-//show: "market" | "detail" | "profile" | "portfolio" | "transactions"
 
 const rootReducer = (oldState = initialState, action) => {
   switch (action.type) {
     case 'fillStocks': {
-      return {...oldState, stocks: action.stocks}
+      return {...oldState, stockNames: action.stockNames, stockObjs: action.stockObjs}
+    }
+    case 'fillMarket': {
+      return {...oldState, market: action.market}
+    }
+    case 'fillDetail': {
+      return {...oldState, detail: action.detail}
     }
     default: {
       return oldState
