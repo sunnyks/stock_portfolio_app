@@ -11,3 +11,14 @@ to do
 
 -redux implementation
  make reducers pass dispact connect w. redux
+
+-figure out how to get a ticker going
+
+-nasdaq & dow jones on market component?
+
+WHAT DOES STATE LOOK LIKE
+
+reducers
+-profile reducer
+-chart reducer?
+-user reducer

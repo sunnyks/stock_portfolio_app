@@ -65,7 +65,8 @@ const mapStateToProps = state => {
   return { stockNames: state.stockNames,
            stockObjs: state.stockObjs,
            API: state.API,
-           market: state.market}
+           market: state.market,
+           user: state.user}
 }
 
 

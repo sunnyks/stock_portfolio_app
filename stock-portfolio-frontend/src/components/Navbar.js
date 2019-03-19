@@ -4,12 +4,19 @@ import { connect } from 'react-redux'
 
 class Navbar extends React.Component {
 
+  loggedIn = () => {
+    return <span> <Link to={'/profile'}> Profile </Link> <Link to={'/logout'}>Logout</Link> </span>
+  }
+
 
   render() {
     return(
       <div>
         <div>'navbar with login/logout profile and searchbar(add searchbar component)'</div>
-        <div><Link to={'/'} className={'lol'}>Market</Link> <Link to={'/profile'}> Profile </Link></div>
+        <div>
+          <Link to={'/'} className={'lol'}>Market</Link>
+          {this.props.user ? this.loggedIn() : <Link to={'/login'}> Login </Link>}
+        </div>
       </div>
     )
   }
@@ -17,13 +24,13 @@ class Navbar extends React.Component {
 
 
 const mapStateToProps = state => {
-  return   // ??
+  return {user: state.user}
 }
 
+// 
+// const mapDispatchToProps = dispatch => {
+//   return
+// }
 
-const mapDispatchToProps = dispatch => {
-  return
-}
 
-
-export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Navbar))
+export default withRouter(connect(mapStateToProps, null)(Navbar))

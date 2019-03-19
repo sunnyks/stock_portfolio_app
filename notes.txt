@@ -1,1 +1,55 @@
-iex supported symbols: fetch("https://api.iextrading.com/1.0/ref-data/symbols")
+iex supported symbols: fetch("https://api.iextrading.com/1.0/ref-data/symbols") on mount
+
+Returns an array of quotes for the top 10 symbols in a specified list.
+LIST
+HTTP request
+/stock/market/list/mostactive
+/stock/market/list/gainers
+/stock/market/list/losers
+/stock/market/list/iexvolume
+/stock/market/list/iexpercent
+/stock/market/list/infocus
+
+API = "https://api.iextrading.com/1.0"
+
+LOGO
+/stock/aapl/logo
+
+NEWS
+/stock/aapl/news
+/stock/aapl/news/last/1
+/stock/market/news/last/5
+
+PRICE
+/stock/aapl/price
+
+QUOTE
+/stock/aapl/quote
+
+CHART
+HTTP request
+/stock/aapl/chart
+/stock/aapl/chart/5y
+/stock/aapl/chart/2y
+/stock/aapl/chart/1y
+/stock/aapl/chart/ytd
+/stock/aapl/chart/6m
+/stock/aapl/chart/3m
+/stock/aapl/chart/1m
+/stock/aapl/chart/1d
+/stock/aapl/chart/date/20180129
+/stock/aapl/chart/dynamic
+
+Time Series
+HTTP request example
+
+GET /stock/{symbol}/time-series
+HTTP request
+/stock/aapl/time-series
+
+
+HTTP request
+/tops
+/tops?symbols=SNAP,fb,AIG%2b
+/tops?symbols=SNAP,fb,AIG%2b&format=csv
+ The /tops endpoint without any parameters will return all symbols. TOPS data with all symbols is 1.78mb uncompressed (270kb compressed) and is throttled at one request per second.

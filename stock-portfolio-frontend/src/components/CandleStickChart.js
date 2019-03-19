@@ -55,8 +55,8 @@ class CandleStickChart extends React.Component {
 }
 
 const mapStateToProps = state => {
-  return { API: state.API,
-           data: state.detail.timeseries}
+  return { API: state.API}
+           // data: state.detail.timeseries}
 }
 
 // CandleStickChart.propTypes = {

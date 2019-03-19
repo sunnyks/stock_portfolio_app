@@ -8,7 +8,10 @@ const initialState = {
   market: {mostactive: null,
            gainers: null,
            losers: null},
-  detail: null
+  detail: null,
+  portfolios: null,
+  activePortfolio: null,
+  BACKEND: 'http://localhost:3000'
 }
 
 const rootReducer = (oldState = initialState, action) => {
@@ -21,6 +24,12 @@ const rootReducer = (oldState = initialState, action) => {
     }
     case 'fillDetail': {
       return {...oldState, detail: action.detail}
+    }
+    case 'fillPortfolios': {
+      return {...oldState, portfolios: action.portfolios}
+    }
+    case 'LOGIN': {
+      return {...oldState, user: action.user}
     }
     default: {
       return oldState
