@@ -11,7 +11,8 @@ const initialState = {
   detail: null,
   portfolios: null,
   activePortfolio: null,
-  BACKEND: 'http://localhost:3000'
+  BACKEND: 'http://localhost:3000',
+  portfolioDetails: null
 }
 
 const rootReducer = (oldState = initialState, action) => {
@@ -28,8 +29,18 @@ const rootReducer = (oldState = initialState, action) => {
     case 'fillPortfolios': {
       return {...oldState, portfolios: action.portfolios}
     }
+    case 'fillPortfolioDetails': {
+      return {...oldState, portfolioDetails: action.portfolioDetails}
+    }
+    case 'setActivePortfolio': {
+      return {...oldState, activePortfolio: action.activePortfolio}
+    }
     case 'LOGIN': {
       return {...oldState, user: action.user}
+    }
+    case 'LOGOUT': {
+      // localStorage.clear
+      return {...oldState, user: null}
     }
     default: {
       return oldState

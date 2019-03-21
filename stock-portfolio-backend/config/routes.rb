@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
   resources :transactions, only: [:create, :index]
-  resources :portfolios, only: [:create, :edit, :delete, :show]
+  resources :portfolios, only: [:create, :edit, :delete, :show, :index]
   resources :users, only: [:create, :show]
 
   post '/login', to: 'auth#create'

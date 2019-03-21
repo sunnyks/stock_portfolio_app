@@ -12,11 +12,18 @@ class TransactionsController < ApplicationController
   def create
     @user = User.find(params[:user])
     @portfolio = Portfolio.find_by(user: @user, name: params[:portfolio])
-    # byebug
-    @transaction = Transaction.new(user: @user, portfolio: @porfolio, symbol: params[:symbol], transtype: params[:type], quantity: params[:quantity], price: params[:price])
+    # have a redundant column in my table whoops
+    quantity = params[:quantity].to_i
+    transtype = params[:type]
+    if transtype == "buy"
+      @transaction = Transaction.new(user: @user, portfolio: @porfolio, symbol: params[:symbol], transtype: params[:type], quantity: quantity, price: params[:price])
+    elsif transtype == "sell" && true
+      # implement check to make sure given portfolio containts quantity of stock to sell
+      @transaction = Transaction.new(user: @user, portfolio: @porfolio, symbol: params[:symbol], transtype: params[:type], quantity: -quantity, price: params[:price])
+    end
     @transaction.portfolio = @portfolio
     if @transaction.save
-      render json: {user: @user}, status: :created
+      render json: {portfolios: @user.getPortfolios}, status: :created
     else
       render json: @transaction.errors
     end

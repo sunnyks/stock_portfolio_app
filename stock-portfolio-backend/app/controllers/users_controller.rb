@@ -15,8 +15,7 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(show_params[:id])
-    @portfolioList = Portfolio.where(user: @user).map { |e| [e.name, e.id] }.to_h
-    # byebug
+    @portfolioList = @user.getPortfolios
     render json: {username: @user.username, portfolios: @portfolioList}
   end
 

@@ -14,6 +14,9 @@ class PortfoliosController < ApplicationController
     end
   end
 
+  def index
+  end
+
   def delete
   end
 

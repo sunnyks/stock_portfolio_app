@@ -8,7 +8,7 @@ class TransactionForm extends React.Component {
   state = {
     type: "buy",
     quantity: 0,
-    portfolio: null
+    portfolio: Object.keys(this.props.portfolios)[0]
   }
 
   //get stock info from like um props
@@ -25,7 +25,10 @@ class TransactionForm extends React.Component {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({...this.state, user: this.props.user, symbol: this.props.symbol, price: this.props.price})
-    }).then(res => res.json()).then(console.log)
+    }).then(res => res.json()).then((data) => {
+      console.log(data)
+      Store.dispatch({type: 'fillPortfolios',
+                      portfolios: data.portfolios})})
     event.target.reset()
   }
 
@@ -38,19 +41,16 @@ class TransactionForm extends React.Component {
   render() {
     return(
       <div>
-        whaddaya buyin?? whadaya sellin?? i've got some good things on sale, stranger
         <form onSubmit={this.handleSubmit}>
           <select id="buysell" onChange={(e) => this.setState({type: e.target.value})} value={this.state.type}>
             <option value="buy">buy</option>
             <option value="sell">sell</option>
           </select>
-          {/*select portfolio to make transaction in*/}
           <input type="text" placeholder="quantity" onChange={(e) => this.setState({quantity: e.target.value})}/> of {this.props.symbol} at ${this.props.price} for ${parseInt(this.state.quantity) * this.props.price} total in portfolio:
-          <select id="portfolios" onChange={(e) => this.setState({portfolio: e.target.value})} value={this.state.portfolio ? this.state.portfolio : this.props.portfolios[0]}>
+          <select id="portfolios" onChange={(e) => this.setState({portfolio: e.target.value})} value={this.state.portfolio ? this.state.portfolio : Object.keys(this.props.portfolios)[0]}>
             {this.props.portfolios ? this.portfoliosSelect() : null}
           </select>
           {/*select quantity and confirm?*/}
-          {/*post transaction*/}
           <button type="submit">Submit Transaction</button>
         </form>
       </div>

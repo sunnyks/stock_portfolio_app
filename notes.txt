@@ -1,5 +1,7 @@
 iex supported symbols: fetch("https://api.iextrading.com/1.0/ref-data/symbols") on mount
 
+/stock/market/batch?symbols=aapl,fb,tsla&types=quote,news,chart&range=1m&last=5
+
 Returns an array of quotes for the top 10 symbols in a specified list.
 LIST
 HTTP request

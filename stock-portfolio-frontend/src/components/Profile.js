@@ -44,7 +44,10 @@ class Profile extends React.Component {
 
   portfolioList = () => {
     return Object.keys(this.props.portfolios).map(p => {
-      return <button value={p} onClick={(e) => {this.setState({showPortfolio: p})}}>{p}</button>
+      return <button value={p} onClick={(e) => {
+        Store.dispatch({type: 'setActivePortfolio', activePortfolio: this.props.portfolios[p]})
+        // this.setState({showPortfolio: p})
+      }}>{p}</button>
     })
   }
 
@@ -61,7 +64,7 @@ class Profile extends React.Component {
         </div>
         <div>
           {this.portfolioList()}
-          {this.state.showPortfolio ? <Portfolio portfolio={this.state.showPortfolio}/> : null}
+          {this.props.activePortfolio ? <Portfolio/> : "Pick a portfolio to view"}
         </div>
       </div>
     )

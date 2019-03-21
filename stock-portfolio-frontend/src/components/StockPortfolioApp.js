@@ -7,6 +7,7 @@ import Market from './Market'
 import Store from '../store'
 import Header from './Header'
 import Login from './Login'
+import Signup from './Signup'
 
 class StockPortfolioApp extends React.Component {
 
@@ -20,7 +21,7 @@ class StockPortfolioApp extends React.Component {
       <Header/>
       <Switch>
         <Route path="/login" component={Login} />
-        <Route exact path="/signup" component={Login} />
+        <Route exact path="/signup" component={Signup} />
         <Route path="/profile" component={withRouter(Profile)} />
         <Route exact path="/stock/:symbol" component={withRouter(Detail)} />
         <Route exact path="/" component={withRouter(Market)} />
