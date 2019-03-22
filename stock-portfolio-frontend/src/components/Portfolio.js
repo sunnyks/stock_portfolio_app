@@ -11,7 +11,9 @@ class Portfolio extends React.Component {
     // portfolio: this.props.portfolio,
     portfolioDetails: null,
     value: null,
-    spent: null
+    spent: null,
+    showTransactions: null,
+    transactions: null
   }
 
   getValue = () => {
@@ -106,12 +108,36 @@ class Portfolio extends React.Component {
     // debugger
   }
 
+  //vvvvvvvv
+  showPortfolio = () => {
+    return JSON.stringify(this.props.activePortfolio)
+    // Object.entries(this.props.activePortfolio).map(s => {})
+  }
+
+  showTransactionHistory = () => {
+    if (this.props.transHistory) return
+    fetch(this.props.BACKEND + '/transactions', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${localStorage.getItem('token')}`
+      }
+    }).then(res => res.json()).then((trans) => {
+      Store.dispatch({ type: 'fillTransHistory', action: trans})
+      console.log(trans)
+    })
+  }
+
   render() {
     // debugger
     return(
       <div>
-        {JSON.stringify(this.props.activePortfolio)}
-        Portfolio Value: {this.state.value - this.state.spent}
+        <div>
+          {this.props.activePortfolio ? this.showPortfolio() : null}
+        </div>
+        <div>
+          Portfolio Value: {this.state.value - this.state.spent}
+        </div>
+        <button onClick={this.showTransactionHistory()}>Show Transaction History</button>
       </div>
     )
   }
@@ -122,7 +148,8 @@ const mapStateToProps = state => {
           portfolios: state.portfolios,
           portfolioDetails: state.portfolioDetails,
           activePortfolio: state.activePortfolio,
-          API: state.API}
+          API: state.API,
+          BACKEND: state.BACKEND}
 }
 
 const mapDispatchToProps = dispatch => {

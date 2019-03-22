@@ -1,6 +1,5 @@
 class PortfoliosController < ApplicationController
 
-
   def create
     # byebug
     @user = User.find(params[:user])

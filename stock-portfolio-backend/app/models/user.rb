@@ -3,6 +3,7 @@ class User < ApplicationRecord
   has_many :transactions, through: :portfolios
   has_secure_password
 
+  validates :username, uniqueness: true
 
   def getPortfolios
     out = Hash.new

@@ -16,13 +16,14 @@ class CandleStickChart extends React.Component {
 	render() {
 		// const { type, width, data, ratio } = this.props;
     let data = this.props.data
+		let width = this.props.width
     data = data.map(d => {
       let date = d.date + 'T05:00:00.000Z'
       d.date = new Date(date)
       return d
     })
     const ratio = 1
-    const width = 1000
+    // const width = 1000
     const type = "hybrid"
 
     const last = (d) => d.slice(-1)[0]

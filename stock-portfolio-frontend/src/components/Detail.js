@@ -73,7 +73,7 @@ class Detail extends React.Component {
             <option value="6m">6m</option>
             <option value="1m">1m</option>
           </select>
-          <CandleStickChart data={this.state.detail.timeseries}/>
+          <CandleStickChart data={this.state.detail.timeseries} width={1000}/>
         </div>
         <div> {this.props.user ? <TransactionForm symbol={company.symbol} price={price}/> : null }</div>
         <div>

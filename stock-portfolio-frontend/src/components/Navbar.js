@@ -1,19 +1,26 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom';
 import { connect } from 'react-redux'
+import Store from '../store'
 
 class Navbar extends React.Component {
 
   loggedIn = () => {
-    return <span> <Link to={'/profile'}> Profile </Link> <Link to={'/logout'}>Logout</Link> </span>
+    // get logout working
+    return <span> <Link to={'/profile'}> Profile </Link> <button OnClick={this.logOut}>Logout</button> </span>
   }
 
+  logOut = () => {
+    localStorage.clear()
+    console.log('LOGOUT')
+    Store.dispatch({ type: 'LOGOUT'})
+    this.props.history.push('/')
+  }
 
   render() {
     return(
       <div>
-        <div>'navbar with login/logout profile and searchbar(add searchbar component)'</div>
-        <div>
+        <div>Search:
           <Link to={'/'} className={'lol'}>Market</Link>
           {this.props.user ? this.loggedIn() : <Link to={'/login'}> Login </Link>}
         </div>
@@ -27,7 +34,7 @@ const mapStateToProps = state => {
   return {user: state.user}
 }
 
-// 
+//
 // const mapDispatchToProps = dispatch => {
 //   return
 // }

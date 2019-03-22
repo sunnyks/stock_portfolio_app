@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-
 //
 //
 // YIKES! refactor this
+const BACKEND = "http://localhost:3000"
 
 class Signup extends React.Component {
 
@@ -13,7 +14,6 @@ class Signup extends React.Component {
   }
 
   getAuthToken = (info) => {
-    const BACKEND = "http://localhost:3000"
     return fetch(`${BACKEND}/users`, {
       method: "POST",
       headers: {
@@ -23,14 +23,27 @@ class Signup extends React.Component {
     }).then(res => res.json())
   }
 
-  //
-  // handleSubmit = (event) => {
-  //   event.preventDefault()
-  //   this.getAuthToken(this.state).then(payload => {
-  //     localStorage.setItem("token", payload.token)
-  //     this.props.history.push('/')
-  //   })
-  // }
+//   fetch('http://localhost:3000/users', {
+// method: 'POST',
+// headers: {
+// 'Content-Type': 'application/json',
+// Accept: "application/json"},
+// body: JSON.stringify({
+// user: {
+// username: 'wunny',
+// password: '1234'}})}).then(res => res.json).then(console.log)
+
+  handleSubmit = (event) => {
+    event.preventDefault()
+    fetch(BACKEND + '/users', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(this.state)
+    }).then(res => res.json()).then(console.log)
+    this.props.history.push('/login')
+  }
 
   render(){
     return(

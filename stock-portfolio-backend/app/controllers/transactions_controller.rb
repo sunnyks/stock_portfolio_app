@@ -17,9 +17,11 @@ class TransactionsController < ApplicationController
     transtype = params[:type]
     if transtype == "buy"
       @transaction = Transaction.new(user: @user, portfolio: @porfolio, symbol: params[:symbol], transtype: params[:type], quantity: quantity, price: params[:price])
-    elsif transtype == "sell" && true
+    elsif transtype == "sell" && (@portfolio.transactions.where(symbol: params[:symbol]).sum('quantity') >= quantity)
       # implement check to make sure given portfolio containts quantity of stock to sell
       @transaction = Transaction.new(user: @user, portfolio: @porfolio, symbol: params[:symbol], transtype: params[:type], quantity: -quantity, price: params[:price])
+    else
+      render json: { error: 'cannot sell stocks you do not have' }, status: :not_acceptable
     end
     @transaction.portfolio = @portfolio
     if @transaction.save
@@ -27,6 +29,12 @@ class TransactionsController < ApplicationController
     else
       render json: @transaction.errors
     end
+  end
+
+  def index
+    @user = User.find(current_user.id)
+    @transactions = Transaction.where(user: @user)
+    render json: {transactions: @transactions}
   end
 
   private
