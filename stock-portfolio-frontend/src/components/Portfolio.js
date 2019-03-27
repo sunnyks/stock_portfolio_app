@@ -1,6 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux'
 import Store from '../store'
+import { Link, withRouter } from 'react-router-dom'
+import { Table } from 'semantic-ui-react'
+
 
 // this file is quite honestly hideous and is in need of major refactoring
 
@@ -8,18 +11,14 @@ class Portfolio extends React.Component {
 
 
   state = {
-    // portfolio: this.props.portfolio,
     portfolioDetails: null,
     value: null,
     spent: null,
-    showTransactions: null,
+    showTransactions: false,
     transactions: null
   }
 
   getValue = () => {
-    // figure this out wtf!
-    // blow this up and start again
-    // let value = 0
     let spent = 0
     if (Object.entries(this.props.activePortfolio.holdings).length === 0 && this.props.activePortfolio.holdings.constructor === Object) return
     let holdings = this.props.activePortfolio.holdings
@@ -43,26 +42,20 @@ class Portfolio extends React.Component {
       Store.dispatch({ type: 'fillPortfolioDetails',
                        portfolioDetails: data})
     })
-    // debugger
-    // ////////////////////////////////////////////////////////////////////////
-    // // const holdings = this.props.portfolios[this.props.portfolio].holdings
-    // let holdings = this.props.activePortfolio.holdings
-    // //debugger
-    // for (let stoc in holdings) {
-    //   spent += holdings[stoc].spent
-    // }
-    // const stocks = this.props.portfolioDetails
-    // for (let stok in stocks) {
-    //   debugger
-    //   value += holdings[stok].quantity * stocks[stok].quote.latestPrice
-    // }
-    // // debugger
-    // if (this.state.value === (value-spent)) return
-    // this.setState({value: (value - spent)})
-    // // console.log(value-spent)
-    // /////////////////////////////////////////////////////////////////////////
   }
 
+  portMatch = () => {
+    // return (Object.keys(this.props.activePortfolio.holdings) === Object.keys(this.props.portfolioDetails))
+    const a = Object.keys(this.props.activePortfolio.holdings)
+    const b = Object.keys(this.props.portfolioDetails)
+    if (a.length !== b.length) return false
+    for (let q = 0; q < a.length; q++) {
+      if (a[q] !== b[q]) return false
+    }
+    return true
+  }
+
+  // MOVE THIS TO PROFILE ACTUALLY
   getPortfolioDetails = () => {
     let symbols = Object.keys(this.props.activePortfolio.holdings).join(',')
     fetch(this.props.API + `/stock/market/batch?symbols=${symbols}&types=quote`).then(res => res.json()).then((data) => {
@@ -75,71 +68,132 @@ class Portfolio extends React.Component {
   }
 
   componentDidUpdate() {
-    // let symbols = Object.keys(this.props.activePortfolio.holdings).join(',')
-    // debugger
-    // if (this.state.portfolioDetails === null) return
-    // if (Object.keys(this.props.portfolioDetails).join(',') === symbols) return
-    // fetch(this.props.API + `/stock/market/batch?symbols=${symbols}&types=quote`).then(res => res.json()).then((data) => {
-    //   Store.dispatch({ type: 'fillPortfolioDetails',
-    //                    portfolioDetails: data})
-    //   console.log(data)
-    // }).then(this.getValue())
-
-    // debugger
-    // if (Object.keys(this.state.portfolioDetails) === Object.keys(this.props.activePortfolio)) return
     this.getValue()
   }
 
   componentDidMount() {
-    // debugger
-    // >>>>calculate value of portfolio<<<
-    // `/stock/${symbol}/batch?types=quote,news,company,stats,logo,timeseries&range=1y`
-    // /stock/market/batch?symbols=aapl,fb,tsla&types=quote,news,chart&range=1m&last=5
-    // let symbols = Object.keys(this.props.portfolios[this.props.portfolio].holdings).join(',')
-    // debugger
-    // let symbols = Object.keys(this.props.activePortfolio.holdings).join(',')
-    // fetch(this.props.API + `/stock/market/batch?symbols=${symbols}&types=quote`).then(res => res.json()).then((data) => {
-    //   Store.dispatch({ type: 'fillPortfolioDetails',
-    //                    portfolioDetails: data})
-    //   console.log(data)
-    // }).then(this.getValue())
-    this.getPortfolioDetails()
+    // this.getPortfolioDetails()
     this.getValue()
-    // debugger
   }
 
-  //vvvvvvvv
+  //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   showPortfolio = () => {
-    return JSON.stringify(this.props.activePortfolio)
-    // Object.entries(this.props.activePortfolio).map(s => {})
+    // return JSON.stringify(this.props.activePortfolio)
+    return (
+      <Table celled>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell> Symbol </Table.HeaderCell>
+            <Table.HeaderCell> Quantity </Table.HeaderCell>
+            <Table.HeaderCell> Current Value ($)</Table.HeaderCell>
+            <Table.HeaderCell> +/- (%)</Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+
+        <Table.Body>
+          {this.showPortfolioHoldings()}
+        </Table.Body>
+      </Table>
+    )
   }
 
-  showTransactionHistory = () => {
-    if (this.props.transHistory) return
-    fetch(this.props.BACKEND + '/transactions', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${localStorage.getItem('token')}`
-      }
-    }).then(res => res.json()).then((trans) => {
-      Store.dispatch({ type: 'fillTransHistory', action: trans})
-      console.log(trans)
+  showPortfolioHoldings = () => {
+    // lol refactor here
+    const okayThen = Object.keys(this.props.activePortfolio.holdings)
+    return okayThen.map(z => {
+      if (this.props.activePortfolio.holdings[z].quantity <= 0) return null
+      // debugger
+      return(
+        <Table.Row>
+          <Table.Cell><Link to={`/stock/${z}`}>{z}</Link></Table.Cell>
+          <Table.Cell>{this.props.activePortfolio.holdings[z].quantity}</Table.Cell>
+          <Table.Cell>{this.props.portfolioDetails[z].quote.latestPrice}</Table.Cell>
+          <Table.Cell>{this.calcChange(z)}</Table.Cell>
+        </Table.Row>
+      )
     })
   }
 
-  render() {
-    // debugger
-    return(
-      <div>
-        <div>
-          {this.props.activePortfolio ? this.showPortfolio() : null}
-        </div>
-        <div>
-          Portfolio Value: {this.state.value - this.state.spent}
-        </div>
-        <button onClick={this.showTransactionHistory()}>Show Transaction History</button>
-      </div>
+  calcChange = (stock) => {
+    const s = this.props.activePortfolio.holdings[stock].spent
+    const m = this.props.portfolioDetails[stock].quote.latestPrice * this.props.activePortfolio.holdings[stock].quantity
+    const lol = m-s
+    const p = (lol/s)*100
+    return lol.toFixed(2).toString() + ' (' + p.toFixed(2).toString() + ')'
+  }
+
+  // getTransactionHistory = () => {
+  //   if (this.props.transactionHistory) return
+  //   fetch(this.props.BACKEND + '/transactions', {
+  //     method: 'GET',
+  //     headers: {
+  //       'Authorization': `Bearer ${localStorage.getItem('token')}`
+  //     }
+  //   }).then(res => res.json()).then((trans) => {
+  //     Store.dispatch({ type: 'fillTransHistory', transactionHistory: trans})
+  //     console.log(trans)
+  //   }).then(console.log('lol'))
+  // }
+
+  showTransactionTable = () => {
+    // return this.props.transactionHistory.filter(t => t.portfolio_id === this.props.activePortfolio.id).map(t => {
+    //   if (t.quantity === 0) return null
+    //   return <div> {t.transtype} {Math.abs(t.quantity)} <Link to={`/stock/${t.symbol}`}> {t.symbol} </Link> @ ${t.price.toFixed(2)} on {t.created_at.split('T')[0]+', ' + t.created_at.split('T')[1].split('.')[0]}</div>
+    // })
+    return (
+      <Table celled>
+        <Table.Header>
+          <Table.Row>
+            <Table.HeaderCell> Buy/Sell </Table.HeaderCell>
+            <Table.HeaderCell> Quantity </Table.HeaderCell>
+            <Table.HeaderCell> Symbol </Table.HeaderCell>
+            <Table.HeaderCell> Price </Table.HeaderCell>
+            <Table.HeaderCell> Date </Table.HeaderCell>
+            <Table.HeaderCell> Time </Table.HeaderCell>
+          </Table.Row>
+        </Table.Header>
+
+        <Table.Body>
+          {this.showTransaction()}
+        </Table.Body>
+      </Table>
     )
+  }
+
+  showTransaction = () => {
+    return this.props.transactionHistory.filter(t => t.portfolio_id === this.props.activePortfolio.id).map(t => {
+      if (t.quantity === 0) return null
+      // return <div> {t.transtype} {Math.abs(t.quantity)} <Link to={`/stock/${t.symbol}`}> {t.symbol} </Link> @ ${t.price.toFixed(2)} on {t.created_at.split('T')[0]+', ' + t.created_at.split('T')[1].split('.')[0]}</div>
+      return(
+        <Table.Row>
+          <Table.Cell>{t.transtype}</Table.Cell>
+          <Table.Cell>{t.quantity}</Table.Cell>
+          <Table.Cell><Link to={`/stock/${t.symbol}`}>{t.symbol}</Link></Table.Cell>
+          <Table.Cell>{t.price}</Table.Cell>
+          <Table.Cell>{t.created_at.split('T')[0]}</Table.Cell>
+          <Table.Cell>{t.created_at.split('T')[1].split('.')[0]}</Table.Cell>
+        </Table.Row>
+      )
+    })
+  }
+
+// ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  render() {
+
+      return(
+          <div>
+            <div>
+              {(this.props.activePortfolio && this.props.portfolioDetails && this.portMatch()) ? this.showPortfolio() : null}
+            </div>
+            <div>
+              Portfolio Value: {(this.state.value - this.state.spent).toFixed(2)}
+            </div>
+            <button onClick={() => {Store.dispatch({type: 'showTransactions', showTransactions: !this.props.showTransactions})}}>Show Transaction History</button>
+            <div>
+              {this.props.showTransactions ? this.showTransactionTable() : null}
+            </div>
+          </div>
+      )
   }
 }
 
@@ -149,7 +203,9 @@ const mapStateToProps = state => {
           portfolioDetails: state.portfolioDetails,
           activePortfolio: state.activePortfolio,
           API: state.API,
-          BACKEND: state.BACKEND}
+          BACKEND: state.BACKEND,
+          transactionHistory: state.transactionHistory,
+          showTransactions: state.showTransactions}
 }
 
 const mapDispatchToProps = dispatch => {
@@ -158,4 +214,4 @@ const mapDispatchToProps = dispatch => {
 
 
 
-export default connect(mapStateToProps, mapDispatchToProps)(Portfolio)
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Portfolio))

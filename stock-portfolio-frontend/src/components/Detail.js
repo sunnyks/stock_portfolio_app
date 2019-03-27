@@ -4,6 +4,8 @@ import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom';
 import CandleStickChart from './CandleStickChart'
 import TransactionForm from './TransactionForm'
+import { Grid, Image } from 'semantic-ui-react'
+import CandleStickChartwMouse from './CandleStickChartwMouse'
 
 
 

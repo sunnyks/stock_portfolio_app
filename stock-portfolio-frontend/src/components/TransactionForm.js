@@ -17,6 +17,10 @@ class TransactionForm extends React.Component {
   handleSubmit = (event) => {
     event.preventDefault()
     console.log(event)
+    if ((this.state.portfolio.indexOf(this.props.symbol) === -1) && this.state.type === "sell") {
+      alert("Can't sell what you don't have!")
+      return
+    }
     // make transaction post
     fetch('http://localhost:3000/transactions', {
       method: 'POST',
@@ -28,7 +32,8 @@ class TransactionForm extends React.Component {
     }).then(res => res.json()).then((data) => {
       console.log(data)
       Store.dispatch({type: 'fillPortfolios',
-                      portfolios: data.portfolios})})
+                      portfolios: data.portfolios,
+                      transactionHistory: data.transactions})})
     event.target.reset()
   }
 

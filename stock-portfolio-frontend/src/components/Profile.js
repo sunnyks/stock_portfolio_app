@@ -20,8 +20,22 @@ class Profile extends React.Component {
     )
   }
 
+  // getTransactionHistory = () => {
+  //   if (this.props.transactionHistory) return
+  //   return fetch(this.props.BACKEND + '/transactions', {
+  //     method: 'GET',
+  //     headers: {
+  //       'Authorization': `Bearer ${localStorage.getItem('token')}`
+  //     }
+  //   }).then(res => res.json()).then((trans) => {
+  //     Store.dispatch({ type: 'fillTransHistory', transactionHistory: trans})
+  //     console.log(trans)
+  //   })
+  // }
+
   handleSubmit = (e) => {
     e.preventDefault()
+    if (Object.keys(this.props.portfolios).indexOf(this.state.newPortName) >= 0) return
     // fetch post new portfolio
     console.log(this.state.newPortName)
     fetch('http://localhost:3000/portfolios', {
@@ -45,30 +59,49 @@ class Profile extends React.Component {
   portfolioList = () => {
     return Object.keys(this.props.portfolios).map(p => {
       return <button value={p} onClick={(e) => {
+        this.getPortfolioDetails(p)
         Store.dispatch({type: 'setActivePortfolio', activePortfolio: this.props.portfolios[p]})
         // this.setState({showPortfolio: p})
       }}>{p}</button>
     })
   }
 
+  // MOVE THIS TO PROFILE ACTUALLY
+  getPortfolioDetails = (p) => {
+    let symbols = Object.keys(this.props.portfolios[p].holdings).join(',')
+    fetch(this.props.API + `/stock/market/batch?symbols=${symbols}&types=quote`).then(res => res.json()).then((data) => {
+      Store.dispatch({ type: 'fillPortfolioDetails',
+                       portfolioDetails: data})
+      // this.setState({portfolioDetails: data})
+      console.log(data)
+    })
+    // .then(this.getValue())
+  }
+
   componentDidMount() {
     // fetch all the portfolios values and user data including total overall value
+    // this.getTransactionHistory()
   }
 
   render() {
-    return(<div>
-      profile info (display portfolios) route to diff portfolios
-        <div>
-          <button onClick={() => this.setState({showNewPortNameIn: true})}>New Portfolio</button>
-          {this.state.showNewPortNameIn ? this.showNewPortForm() : null}
+    if (this.props.user === null) {
+      this.props.history.push('/login')
+      return(null)
+    }
+    else {
+      return(<div>
+          <div>
+            <button onClick={() => this.setState({showNewPortNameIn: true})}>New Portfolio</button>
+            {this.state.showNewPortNameIn ? this.showNewPortForm() : null}
+          </div>
+          <div>
+            {this.props.user ? this.portfolioList() : null}
+            {this.props.activePortfolio ? <Portfolio/> : "Pick a portfolio to view"}
+          </div>
         </div>
-        <div>
-          {this.portfolioList()}
-          {this.props.activePortfolio ? <Portfolio/> : "Pick a portfolio to view"}
-        </div>
-      </div>
-    )
-  }
+      )
+    }
+    }
 
 }
 
@@ -77,7 +110,8 @@ const mapStateToProps = state => {
   return {user: state.user,
           portfolios: state.portfolios,
           activePortfolio: state.activePortfolio,
-          backend: state.BACKEND}
+          backend: state.BACKEND,
+          API: state.API}
 }
 
 

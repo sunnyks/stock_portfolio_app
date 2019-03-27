@@ -14,7 +14,6 @@ to do
 
 -figure out how to get a ticker going
 
--nasdaq & dow jones on market component?
 
 WHAT DOES STATE LOOK LIKE
 

@@ -29,7 +29,9 @@ class Login extends React.Component {
       localStorage.setItem("token", payload.jwt)
       Store.dispatch({ type: 'LOGIN',
                        user: payload.user})
+
       // fetch portfolios preemptively as well tbh
+      // i feel like i should use localStorage.getItem('token') in this fetch instead of payload.user. also, fetch transaction history as well
       fetch(BACKEND + `/users/${payload.user}`, {
         method: 'GET',
         headers: {
@@ -38,7 +40,8 @@ class Login extends React.Component {
       }).then(res => res.json()).then((data) => {
         console.log(data)
         Store.dispatch({ type: 'fillPortfolios',
-                         portfolios: data.portfolios})
+                         portfolios: data.portfolios,
+                         transactionHistory: data.transactions})
         this.props.history.push('/')
       })
     })
@@ -50,9 +53,9 @@ class Login extends React.Component {
       <div>
         <form onSubmit={this.handleSubmit}>
           <h2>Login</h2>
-          <label>Username</label>
+          <label>Username: </label>
           <input type="text" placeholder="username" onChange={(e) => this.setState({username: e.target.value})}/>
-          <label>Password</label>
+          <label>Password: </label>
           <input type="password" placeholder="password" onChange={(e) => this.setState({password: e.target.value})}/>
           <button type="submit">Submit</button>
         </form>

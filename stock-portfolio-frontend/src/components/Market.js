@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 import { BrowserRouter as Router, Route, Link, Switch, withRouter } from 'react-router-dom';
 import Store from '../store'
-import { Grid, Image } from 'semantic-ui-react'
+import { Divider, Grid, Image, Segment } from 'semantic-ui-react'
 import CandleStickChart from './CandleStickChart'
 
 
@@ -83,6 +83,7 @@ class Market extends React.Component {
               <div><h3>Biggest Losers: </h3>{this.props.market.losers ? showList(this.props.market.losers) : 'loading...'}</div>
             </Grid.Column>
           </Grid.Row>
+          <Divider vertical></Divider>
 
           <Grid.Row columns={2}>
             <Grid.Column>

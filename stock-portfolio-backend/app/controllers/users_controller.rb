@@ -16,7 +16,8 @@ class UsersController < ApplicationController
   def show
     @user = User.find(show_params[:id])
     @portfolioList = @user.getPortfolios
-    render json: {username: @user.username, portfolios: @portfolioList}
+    @transactions = Transaction.where(user: @user)
+    render json: {username: @user.username, portfolios: @portfolioList, transactions: @transactions}
   end
 
   private

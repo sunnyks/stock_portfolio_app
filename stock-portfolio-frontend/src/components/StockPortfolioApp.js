@@ -33,11 +33,17 @@ class StockPortfolioApp extends React.Component {
   componentDidMount() {
     fetch("https://api.iextrading.com/1.0/ref-data/symbols").then(res => res.json()).then(data => {
       let stocks = data.map((stock) => {
-        return stock.symbol + ' - ' + stock.name
+        return stock.symbol + '-' + stock.name
       }) //get list of stock symbols and names
+      // this is for newly implemented searchbar.
+      // clean up state and actions b.c this is a mess
+      let sbo = data.map((s) => {
+        return {value: s.symbol, label: s.symbol + '-' + s.name}
+      })
       Store.dispatch({ type: 'fillStocks',
                        stockNames: stocks ,
-                       stockObjs: data })
+                       stockObjs: data ,
+                       searchBarOptions: sbo})
     })
   }
 

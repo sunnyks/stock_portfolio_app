@@ -12,6 +12,8 @@ import { fitWidth } from "react-stockcharts/lib/helper";
 import { last, timeIntervalBarWidth } from "react-stockcharts/lib/utils";
 import { connect } from 'react-redux'
 
+
+
 class CandleStickChart extends React.Component {
 	render() {
 		// const { type, width, data, ratio } = this.props;

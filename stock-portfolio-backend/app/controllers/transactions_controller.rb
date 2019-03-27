@@ -24,10 +24,11 @@ class TransactionsController < ApplicationController
       render json: { error: 'cannot sell stocks you do not have' }, status: :not_acceptable
     end
     @transaction.portfolio = @portfolio
+    @transactions = Transaction.where(user: @user)
     if @transaction.save
-      render json: {portfolios: @user.getPortfolios}, status: :created
+      render json: {portfolios: @user.getPortfolios, transactions: @transactions}, status: :created
     else
-      render json: @transaction.errors
+      render json: {portfolios: @user.getPortfolios, transactions: @transactions}, status: :failed
     end
   end
 
