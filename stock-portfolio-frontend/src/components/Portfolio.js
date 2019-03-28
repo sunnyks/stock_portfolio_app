@@ -187,12 +187,14 @@ class Portfolio extends React.Component {
   }
 
 // ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+
   render() {
 
       return(
           <div>
             <div>
-              <h2 className={this.changeColor((this.state.value - this.state.spent).toString())}>Portfolio Value: {(this.state.value - this.state.spent).toFixed(2)}</h2>
+              <h2 className={this.changeColor((this.state.value - this.state.spent).toString())}>Portfolio Returns: {(this.state.value - this.state.spent).toFixed(2)}</h2>
             </div>
             <div>
               {(this.props.activePortfolio && this.props.portfolioDetails && this.portMatch()) ? this.showPortfolio() : null}

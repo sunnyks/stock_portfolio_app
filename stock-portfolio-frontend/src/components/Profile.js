@@ -68,6 +68,7 @@ class Profile extends React.Component {
 
   // MOVE THIS TO PROFILE ACTUALLY
   getPortfolioDetails = (p) => {
+    if (Object.keys(this.props.portfolios)[0].holdings === undefined) return null
     let symbols = Object.keys(this.props.portfolios[p].holdings).join(',')
     fetch(this.props.API + `/stock/market/batch?symbols=${symbols}&types=quote`).then(res => res.json()).then((data) => {
       Store.dispatch({ type: 'fillPortfolioDetails',
