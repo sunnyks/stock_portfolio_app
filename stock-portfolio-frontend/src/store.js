@@ -51,8 +51,7 @@ const rootReducer = (oldState = initialState, action) => {
       return {...oldState, user: action.user}
     }
     case 'LOGOUT': {
-      // localStorage.clear
-      return {...oldState, user: null}
+      return {initialState}
     }
     default: {
       return oldState

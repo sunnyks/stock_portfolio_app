@@ -47,6 +47,10 @@ class Market extends React.Component {
     // /stock/market/list/infocus
   }
 
+  displayColor = (change) => {
+    let v = parseFloat(change)
+    return (v < 0) ? 'down' : 'up'
+  }
 
   showNews = () => {
     return this.props.market.snp.news.map(s => {
@@ -64,7 +68,7 @@ class Market extends React.Component {
   render() {
     const showList = (list) => {
       return list.map((entry, i) => {
-        return <div>{i+1}. <Link to={`/stock/${entry.symbol}`}> {entry.symbol} {entry.companyName}</Link> ({entry.change})</div>
+        return <span className={'hello'}>{i+1}. <Link to={`/stock/${entry.symbol}`}> {entry.symbol} {entry.companyName}</Link><p className={this.displayColor(entry.change)}>({entry.change})</p></span>
       })
     }
 

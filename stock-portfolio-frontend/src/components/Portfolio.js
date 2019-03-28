@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux'
 import Store from '../store'
 import { Link, withRouter } from 'react-router-dom'
-import { Table } from 'semantic-ui-react'
+import { Table, Tab } from 'semantic-ui-react'
 
 
 // this file is quite honestly hideous and is in need of major refactoring
@@ -23,7 +23,7 @@ class Portfolio extends React.Component {
     if (Object.entries(this.props.activePortfolio.holdings).length === 0 && this.props.activePortfolio.holdings.constructor === Object) return
     let holdings = this.props.activePortfolio.holdings
     for (let h in holdings) {
-      if (holdings[h].quantity >= 0) spent += holdings[h].spent
+      if ((holdings[h].quantity >= 0)) spent += holdings[h].spent
     }
     console.log("spent: ", spent)
     if (this.state.spent === spent) return
@@ -76,6 +76,10 @@ class Portfolio extends React.Component {
     this.getValue()
   }
 
+  roundToTwo = (num) => {
+      return +(Math.round(num + "e+2")  + "e-2");
+    }
+
   //vvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
   showPortfolio = () => {
     // return JSON.stringify(this.props.activePortfolio)
@@ -107,8 +111,8 @@ class Portfolio extends React.Component {
         <Table.Row>
           <Table.Cell><Link to={`/stock/${z}`}>{z}</Link></Table.Cell>
           <Table.Cell>{this.props.activePortfolio.holdings[z].quantity}</Table.Cell>
-          <Table.Cell>{this.props.portfolioDetails[z].quote.latestPrice}</Table.Cell>
-          <Table.Cell>{this.calcChange(z)}</Table.Cell>
+          <Table.Cell>{this.roundToTwo(this.props.portfolioDetails[z].quote.latestPrice).toFixed(2)}</Table.Cell>
+          <Table.Cell><p className={this.changeColor(this.calcChange(z))}>{this.calcChange(z)}</p></Table.Cell>
         </Table.Row>
       )
     })
@@ -119,7 +123,12 @@ class Portfolio extends React.Component {
     const m = this.props.portfolioDetails[stock].quote.latestPrice * this.props.activePortfolio.holdings[stock].quantity
     const lol = m-s
     const p = (lol/s)*100
-    return lol.toFixed(2).toString() + ' (' + p.toFixed(2).toString() + ')'
+    return this.roundToTwo(lol.toFixed(2)).toString() + ' (' + p.toFixed(2).toString() + ')'
+  }
+
+  changeColor = (change) => {
+    let v = change[0]
+    return (v === '-') ? 'down' : 'up'
   }
 
   // getTransactionHistory = () => {
@@ -169,7 +178,7 @@ class Portfolio extends React.Component {
           <Table.Cell>{t.transtype}</Table.Cell>
           <Table.Cell>{t.quantity}</Table.Cell>
           <Table.Cell><Link to={`/stock/${t.symbol}`}>{t.symbol}</Link></Table.Cell>
-          <Table.Cell>{t.price}</Table.Cell>
+          <Table.Cell>{this.roundToTwo(t.price).toFixed(2)}</Table.Cell>
           <Table.Cell>{t.created_at.split('T')[0]}</Table.Cell>
           <Table.Cell>{t.created_at.split('T')[1].split('.')[0]}</Table.Cell>
         </Table.Row>
@@ -183,10 +192,10 @@ class Portfolio extends React.Component {
       return(
           <div>
             <div>
-              {(this.props.activePortfolio && this.props.portfolioDetails && this.portMatch()) ? this.showPortfolio() : null}
+              <h2 className={this.changeColor((this.state.value - this.state.spent).toString())}>Portfolio Value: {(this.state.value - this.state.spent).toFixed(2)}</h2>
             </div>
             <div>
-              Portfolio Value: {(this.state.value - this.state.spent).toFixed(2)}
+              {(this.props.activePortfolio && this.props.portfolioDetails && this.portMatch()) ? this.showPortfolio() : null}
             </div>
             <button onClick={() => {Store.dispatch({type: 'showTransactions', showTransactions: !this.props.showTransactions})}}>Show Transaction History</button>
             <div>

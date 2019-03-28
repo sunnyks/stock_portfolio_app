@@ -7,20 +7,31 @@ class TransactionForm extends React.Component {
 
   state = {
     type: "buy",
-    quantity: 0,
+    quantity: null,
     portfolio: Object.keys(this.props.portfolios)[0]
   }
 
-  //get stock info from like um props
+  badSaleCheck = () => {
+    console.log((this.props.portfolios[this.state.portfolio].holdings[this.props.symbol].quantity < this.state.quantity))
+    console.log(this.props.portfolios)
+    console.log(this.state.portfolio)
+    console.log(this.props.symbol)
+    if (this.state.type === "buy") return false
+    if (this.props.portfolios[this.state.portfolio].holdings[this.props.symbol] === undefined) return true
+    if (this.props.portfolios[this.state.portfolio].holdings[this.props.symbol].quantity > this.state.quantity) return true
+    return false
+  }
 
   // add input handlers
   handleSubmit = (event) => {
     event.preventDefault()
-    console.log(event)
-    if ((this.state.portfolio.indexOf(this.props.symbol) === -1) && this.state.type === "sell") {
-      alert("Can't sell what you don't have!")
-      return
-    }
+    // console.log(event)
+    //
+    // check that transaction is legit
+    // if (this.badSaleCheck()) {
+    //   alert("Can't sell what you don't have!")
+    //   return
+    // }
     // make transaction post
     fetch('http://localhost:3000/transactions', {
       method: 'POST',
@@ -43,6 +54,11 @@ class TransactionForm extends React.Component {
         })
       }
 
+  // export this somewhere
+  roundToTwo = (num) => {
+      return +(Math.round(num + "e+2")  + "e-2");
+    }
+
   render() {
     return(
       <div>
@@ -51,7 +67,7 @@ class TransactionForm extends React.Component {
             <option value="buy">buy</option>
             <option value="sell">sell</option>
           </select>
-          <input type="text" placeholder="quantity" onChange={(e) => this.setState({quantity: e.target.value})}/> of {this.props.symbol} at ${this.props.price} for ${parseInt(this.state.quantity) * this.props.price} total in portfolio:
+          <input type="number" placeholder="quantity" onChange={(e) => this.setState({quantity: e.target.value})}/> of {this.props.symbol} at ${this.props.price} for ${(this.roundToTwo(parseInt(this.state.quantity) * this.props.price)).toFixed(2)} total in portfolio:
           <select id="portfolios" onChange={(e) => this.setState({portfolio: e.target.value})} value={this.state.portfolio ? this.state.portfolio : Object.keys(this.props.portfolios)[0]}>
             {this.props.portfolios ? this.portfoliosSelect() : null}
           </select>

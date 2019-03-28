@@ -11,7 +11,7 @@ class Header extends React.Component {
     return(
       <div>
         <Navbar/>
-        <Ticker/>
+        {/*<Ticker/>*/}
       </div>
     )
   }

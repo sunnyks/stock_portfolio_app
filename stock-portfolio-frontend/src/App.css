@@ -1,7 +1,27 @@
 .App {
   text-align: center;
-  background-color: #b7c0ce;
+  /* background-color: #b7c0ce; */
   font-family: sans-serif;
+}
+
+.down {
+  text-shadow: .8px .8px red;
+}
+
+.up {
+  text-shadow: .8px .8px green;
+}
+
+.hello {
+  display: block;
+}
+
+.market {
+  text-align: left;
+}
+
+.stockPrice {
+  text-align: center;
 }
 
 .App-logo {

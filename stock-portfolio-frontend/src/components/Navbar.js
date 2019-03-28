@@ -13,14 +13,15 @@ class Navbar extends React.Component {
 
   loggedIn = () => {
     // get logout working
-    return <span> <Link to={'/profile'}> Profile </Link> <button OnClick={this.logOut}>Logout</button> </span>
+    return <h3><Link to={'/profile'}> Profile </Link> <Link to={'/'} OnClick={(e) => {this.logOut(e)}}>Logout</Link></h3>
   }
 
-  logOut = () => {
+  logOut = (e) => {
+    Store.dispatch({ type: 'LOGOUT', action: null})
+    e.preventDefault()
     localStorage.clear()
     console.log('LOGOUT')
-    Store.dispatch({ type: 'LOGOUT'})
-    this.props.history.push('/')
+    // window.location.href = '/';
   }
 
   // this search is ugly and dumb. refactor it to be more React based
@@ -52,8 +53,8 @@ class Navbar extends React.Component {
     return(
       <div>
         <div>{this.props.searchBarOptions ? <Select isSearchable={true} isClearable={true} options={this.props.searchBarOptions} onChange={(e) => {this.handleSearch(e)}} placeholder='Search for a stock' /> : 'loading...'}
-          <Link to={'/'} className={'lol'}>Market</Link>
-          {this.props.user ? this.loggedIn() : <Link to={'/login'}> Login </Link>}
+          <h3><Link to={'/'} className={'lol'}>Market</Link></h3>
+          {this.props.user ? this.loggedIn() : <h3><Link to={'/login'}> Login </Link></h3>}
         </div>
       </div>
     )
