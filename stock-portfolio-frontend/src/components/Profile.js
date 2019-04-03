@@ -66,7 +66,6 @@ class Profile extends React.Component {
     })
   }
 
-  // MOVE THIS TO PROFILE ACTUALLY
   getPortfolioDetails = (p) => {
     if (Object.keys(this.props.portfolios)[0].holdings === undefined) return null
     let symbols = Object.keys(this.props.portfolios[p].holdings).join(',')

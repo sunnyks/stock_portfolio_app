@@ -5,17 +5,13 @@ portfolio has many transactions
 user has many transactions through portfolios
 
 to do
--get authentication setup
- implement and validate on user#create
- JWT
+-use current_user in controllers
 
 -redux implementation
  make reducers pass dispact connect w. redux
 
 -figure out how to get a ticker going
 
-
-WHAT DOES STATE LOOK LIKE
 
 reducers
 -profile reducer

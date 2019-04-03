@@ -65,13 +65,13 @@ class Detail extends React.Component {
         <div>
         <Table>
         <Table.Row>
-          <Table.Cell>50 day moving average: </Table.Cell><Table.Cell>{this.roundToTwo(stats.day50MovingAvg).toFixed(2)}</Table.Cell></Table.Row>
-          <Table.Row><Table.Cell>200 day moving average: </Table.Cell><Table.Cell>{this.roundToTwo(stats.day200MovingAvg).toFixed(2)}</Table.Cell></Table.Row>
-          <Table.Row><Table.Cell>1 month change percent: </Table.Cell><Table.Cell>{this.roundToTwo(stats.month1ChangePercent).toFixed(2)}</Table.Cell></Table.Row>
-          <Table.Row><Table.Cell>3 month change percent: </Table.Cell><Table.Cell>{this.roundToTwo(stats.month3ChangePercent).toFixed(2)}</Table.Cell></Table.Row>
-          <Table.Row><Table.Cell>6 month change percent: </Table.Cell><Table.Cell>{this.roundToTwo(stats.month6ChangePercent).toFixed(2)}</Table.Cell></Table.Row>
-          <Table.Row><Table.Cell>52 week high: </Table.Cell><Table.Cell>{this.roundToTwo(stats.week52high).toFixed(2)}</Table.Cell></Table.Row>
-          <Table.Row><Table.Cell>52 week low: </Table.Cell><Table.Cell>{this.roundToTwo(stats.week52low).toFixed(2)}</Table.Cell></Table.Row>
+          <Table.Cell>50 day moving average: </Table.Cell><Table.Cell>${this.roundToTwo(stats.day50MovingAvg).toFixed(2)}</Table.Cell></Table.Row>
+          <Table.Row><Table.Cell>200 day moving average: </Table.Cell><Table.Cell>${this.roundToTwo(stats.day200MovingAvg).toFixed(2)}</Table.Cell></Table.Row>
+          <Table.Row><Table.Cell>1 month change percent: </Table.Cell><Table.Cell>{this.roundToTwo(stats.month1ChangePercent).toFixed(2)}%</Table.Cell></Table.Row>
+          <Table.Row><Table.Cell>3 month change percent: </Table.Cell><Table.Cell>{this.roundToTwo(stats.month3ChangePercent).toFixed(2)}%</Table.Cell></Table.Row>
+          <Table.Row><Table.Cell>6 month change percent: </Table.Cell><Table.Cell>{this.roundToTwo(stats.month6ChangePercent).toFixed(2)}%</Table.Cell></Table.Row>
+          <Table.Row><Table.Cell>52 week high: </Table.Cell><Table.Cell>${this.roundToTwo(stats.week52high).toFixed(2)}</Table.Cell></Table.Row>
+          <Table.Row><Table.Cell>52 week low: </Table.Cell><Table.Cell>${this.roundToTwo(stats.week52low).toFixed(2)}</Table.Cell></Table.Row>
           </Table>
         </div>
       )
@@ -95,7 +95,7 @@ class Detail extends React.Component {
         <Grid.Column>
         <div className={'stockPrice'}>
           <h1>${this.roundToTwo(price).toFixed(2)}</h1>
-          <h2 className={this.displayColor(quote.change)}>{quote.change} ({quote.changePercent})</h2>
+          <h2 className={this.displayColor(quote.change)}>${quote.change} ({quote.changePercent}%)</h2>
         </div>
         </Grid.Column>
         </Grid.Row>
@@ -108,7 +108,7 @@ class Detail extends React.Component {
             <option value="6m">6m</option>
             <option value="1m">1m</option>
           </select>
-          <CandleStickChart data={this.state.detail.timeseries} width={1000}/>
+          <CandleStickChart data={this.state.detail.timeseries} width={700}/>
         </div>
         </Grid.Column>
         <Grid.Column>

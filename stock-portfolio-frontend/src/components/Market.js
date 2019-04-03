@@ -60,7 +60,7 @@ class Market extends React.Component {
 
   showIndex = (index) => {
     return(
-      <CandleStickChart data={index.timeseries} width={800}/>
+      <CandleStickChart data={index.timeseries} width={650}/>
     )
   }
 
